@@ -22,7 +22,6 @@ Profiles:
             <<: *OrdererDefaults
             Organizations:
                 - *DebutInfotechOrderer
-                - *AxisBankOrderer
             Capabilities:
                 <<: *OrdererCapabilities
         Consortiums:
@@ -31,7 +30,7 @@ Profiles:
                     - *DebutInfotech
                     - *AxisBank
 
-    # CHANNEL PROFILE`                
+    # CHANNEL PROFILE        
     Debut_Axis_Channel_Profile:
         Consortium: SampleConsortium
         Application:
@@ -62,21 +61,10 @@ Organizations:
         Name: Debut_Infotech_Pvt_Ltd_Orderer
 
         # ID to load the MSP definition as
-        ID: debut_infotech_msp
+        ID: debut_infotech_orderer_msp
 
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: crypto-config/ordererOrganizations/debutinfotech.com/msp
-
-    - &AxisBankOrderer
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: Axis_Bank_Pvt_Ltd_Orderer
-
-        # ID to load the MSP definition as
-        ID: axis_bank_msp
-
-        # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/axisbank.com/msp
 
     # Peer Organizations
     - &DebutInfotech
@@ -85,7 +73,7 @@ Organizations:
         Name: Debut_Infotech_Pvt_Ltd
 
         # ID to load the MSP definition as
-        ID: debut_infotech_msp
+        ID: debut_infotech_peer_org_msp
 
         MSPDir: crypto-config/peerOrganizations/debutinfotech.com/msp
 
@@ -93,7 +81,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: debut_peer0.example.com
+            - Host: debut_peer0.debutinfotech.com
               Port: 7051
 
     - &AxisBank
@@ -102,7 +90,7 @@ Organizations:
         Name: Axis_Bank_Pvt_Ltd
 
         # ID to load the MSP definition as
-        ID: axis_bank_msp
+        ID: axis_bank_peer_org_msp
 
         MSPDir: crypto-config/peerOrganizations/axisbank.com/msp
 
@@ -128,8 +116,6 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - accounts.axisbank.com:7050
-        - ca.debutinfotech.com:7050
         - hr.debutinfotech.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch

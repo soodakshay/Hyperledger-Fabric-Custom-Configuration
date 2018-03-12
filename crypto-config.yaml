@@ -12,20 +12,20 @@ OrdererOrgs:
   # ---------------------------------------------------------------------------
   - Name: Debut_Infotech_Pvt_Ltd
     Domain: debutinfotech.com
-    # ---------------------------------------------------------------------------
+        # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
     # ---------------------------------------------------------------------------
     Specs:
       - Hostname: hr
-      - Hostname: ca
+      # - Hostname: ca
 
-  - Name: Axis_Bank_Pvt_Ltd
-    Domain: axisbank.com
-    # ---------------------------------------------------------------------------
-    # "Specs" - See PeerOrgs below for complete description
-    # ---------------------------------------------------------------------------
-    Specs:
-      - Hostname: accounts
+  # - Name: Axis_Bank_Pvt_Ltd
+  #   Domain: axisbank.com
+  #   # ---------------------------------------------------------------------------
+  #   # "Specs" - See PeerOrgs below for complete description
+  #   # ---------------------------------------------------------------------------
+  #   Specs:
+  #     - Hostname: accounts
 
 
 
