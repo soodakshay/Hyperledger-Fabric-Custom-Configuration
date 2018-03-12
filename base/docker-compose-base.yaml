@@ -1,0 +1,185 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  accounts.axisbank.com:
+    container_name: accounts.axisbank.com
+    image: hyperledger/fabric-orderer:latest
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=Axis_Bank_Pvt_Ltd_Orderer
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/axisbank.com/orderers/accounts.axisbank.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/axisbank.com/orderers/accounts.axisbank.com/tls/:/var/hyperledger/orderer/tls
+    - accounts.axisbank.com:/var/hyperledger/production/orderer
+    ports:
+      - 1050:7050
+
+  # hr.debutinfotech.com:
+  #   container_name: hr.debutinfotech.com
+  #   image: hyperledger/fabric-orderer:latest
+  #   environment:
+  #     - ORDERER_GENERAL_LOGLEVEL=INFO
+  #     - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+  #     - ORDERER_GENERAL_GENESISMETHOD=file
+  #     - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+  #     - ORDERER_GENERAL_LOCALMSPID=debut_infotech_orderer_msp
+  #     - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+  #     # enabled TLS
+  #     - ORDERER_GENERAL_TLS_ENABLED=true
+  #     - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+  #     - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+  #     - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+  #   working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+  #   command: orderer
+  #   volumes:
+  #   - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+  #   - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/hr.debutinfotech.com/msp:/var/hyperledger/orderer/msp
+  #   - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/hr.debutinfotech.com/tls/:/var/hyperledger/orderer/tls
+  #   - hr.debutinfotech.com:/var/hyperledger/production/orderer
+  #   ports:
+  #     - 2050:7050
+
+
+  # ca.debutinfotech.com:
+  #   container_name: ca.debutinfotech.com
+  #   image: hyperledger/fabric-orderer:latest
+  #   environment:
+  #     - ORDERER_GENERAL_LOGLEVEL=INFO
+  #     - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+  #     - ORDERER_GENERAL_GENESISMETHOD=file
+  #     - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+  #     - ORDERER_GENERAL_LOCALMSPID=debut_infotech_orderer_msp
+  #     - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+  #     # enabled TLS
+  #     - ORDERER_GENERAL_TLS_ENABLED=true
+  #     - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+  #     - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+  #     - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+  #   working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+  #   command: orderer
+  #   volumes:
+  #   - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+  #   - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/ca.debutinfotech.com/msp:/var/hyperledger/orderer/msp
+  #   - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/ca.debutinfotech.com/tls/:/var/hyperledger/orderer/tls
+  #   - ca.debutinfotech.com:/var/hyperledger/production/orderer
+  #   ports:
+  #     - 3050:7050
+
+  debut_peer0.debutinfotech.com:
+    container_name: debut_peer0.debutinfotech.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=debut_peer0.debutinfotech.com
+      - CORE_PEER_ADDRESS=debut_peer0.debutinfotech.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=debut_peer1.debutinfotech.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=debut_peer0.debutinfotech.com:7051
+      - CORE_PEER_LOCALMSPID=debut_infotech_msp
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
+        - debut_peer0.debutinfotech.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  debut_peer1.debutinfotech.com:
+    container_name: debut_peer1.debutinfotech.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=debut_peer1.debutinfotech.com
+      - CORE_PEER_ADDRESS=debut_peer1.debutinfotech.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=debut_peer0.debutinfotech.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=debut_peer1.debutinfotech.com:7051
+      - CORE_PEER_LOCALMSPID=debut_infotech_msp
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer1.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer1.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
+        - debut_peer1.debutinfotech.com:/var/hyperledger/production
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  axis_peer0.axisbank.com:
+    container_name: axis_peer0.axisbank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=axis_peer0.axisbank.com
+      - CORE_PEER_ADDRESS=axis_peer0.axisbank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=axis_peer1.axisbank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=axis_peer0.axisbank.com:7051
+      - CORE_PEER_LOCALMSPID=axis_bank_msp
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer0.axisbank.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer0.axisbank.com/tls:/etc/hyperledger/fabric/tls
+        - axis_peer0.axisbank.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  axis_peer1.axisbank.com:
+    container_name: axis_peer1.axisbank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=axis_peer1.axisbank.com
+      - CORE_PEER_ADDRESS=axis_peer1.axisbank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=axis_peer0.axisbank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=axis_peer1.axisbank.com:7051
+      - CORE_PEER_LOCALMSPID=axis_bank_msp
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer1.axisbank.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer1.axisbank.com/tls:/etc/hyperledger/fabric/tls
+        - axis_peer1.axisbank.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+      - 10053:7053
+
+  axis_peer2.axisbank.com:
+    container_name: axis_peer2.axisbank.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=axis_peer2.axisbank.com
+      - CORE_PEER_ADDRESS=axis_peer2.axisbank.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=axis_peer1.axisbank.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=axis_peer2.axisbank.com:7051
+      - CORE_PEER_LOCALMSPID=axis_bank_msp
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer2.axisbank.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer2.axisbank.com/tls:/etc/hyperledger/fabric/tls
+        - axis_peer2.axisbank.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+      - 11053:7053
+    
