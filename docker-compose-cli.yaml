@@ -13,7 +13,7 @@ volumes:
   peer1.axisbank.com:
 
 networks:
-  newNetwork:
+  new:
 
 services:
 
@@ -23,7 +23,7 @@ services:
       service: hr.debutinfotech.com
     container_name: hr.debutinfotech.com
     networks:
-      - newNetwork
+      - new
 
   peer0.debutinfotech.com:
     container_name: peer0.debutinfotech.com
@@ -31,7 +31,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer0.debutinfotech.com
     networks:
-      - newNetwork
+      - new
 
   peer1.debutinfotech.com:
     container_name: peer1.debutinfotech.com
@@ -39,7 +39,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer1.debutinfotech.com
     networks:
-      - newNetwork
+      - new
 
   peer0.axisbank.com:
     container_name: peer0.axisbank.com
@@ -47,7 +47,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer0.axisbank.com
     networks:
-      - newNetwork
+      - new
 
   peer1.axisbank.com:
     container_name: peer1.axisbank.com
@@ -55,7 +55,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer1.axisbank.com
     networks:
-      - newNetwork
+      - new
 
   cli:
     container_name: cli
@@ -90,4 +90,4 @@ services:
       - peer0.axisbank.com
       - peer1.axisbank.com
     networks:
-      - newNetwork
+      - new

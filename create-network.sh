@@ -12,7 +12,7 @@ echo "**************************** New Certificates Generated ******************
 
 export FABRIC_CFG_PATH=$PWD
 export IMAGE_TAG=latest
-export COMPOSE_PROJECT_NAME=first
+export COMPOSE_PROJECT_NAME=s
 
 configtxgen -profile DebutAxisGenesisBlockProfile -outputBlock ./channel-artifacts/genesis.block
 
