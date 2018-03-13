@@ -7,15 +7,15 @@ version: '2'
 
 services:
 
-  hr.debutinfotech.com:
-    container_name: DebutHROrderer
-    image: hyperledger/fabric-orderer:latest
+  ca.debutinfotech.com:
+    container_name: DebutInfotechCAOrderer
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
       - ORDERER_GENERAL_LOGLEVEL=INFO
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=debut_infotech_orderer_msp
+      - ORDERER_GENERAL_LOCALMSPID=DebutOrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       # enabled TLS
       - ORDERER_GENERAL_TLS_ENABLED=true
@@ -26,109 +26,88 @@ services:
     command: orderer
     volumes:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/hr.debutinfotech.com/msp:/var/hyperledger/orderer/msp
-    - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/hr.debutinfotech.com/tls/:/var/hyperledger/orderer/tls
-    - hr.debutinfotech.com:/var/hyperledger/production/orderer
+    - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/ca.debutinfotech.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/ca.debutinfotech.com/tls/:/var/hyperledger/orderer/tls
+    - ca.debutinfotech.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
 
-  debut_peer0.debutinfotech.com:
-    container_name: debut_peer0.debutinfotech.com
+  peer0.debutinfotech.com:
+    container_name: DebutInfotechPeer0
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=debut_peer0.debutinfotech.com
-      - CORE_PEER_ADDRESS=debut_peer0.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=debut_peer1.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=debut_peer0.debutinfotech.com:7051
-      - CORE_PEER_LOCALMSPID=debut_infotech_peer_org_msp
+      - CORE_PEER_ID=peer0.debutinfotech.com
+      - CORE_PEER_ADDRESS=peer0.debutinfotech.com:1051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.debutinfotech.com:2051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.debutinfotech.com:1051
+      - CORE_PEER_LOCALMSPID=DebutMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
-        - debut_peer0.debutinfotech.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.debutinfotech.com:/var/hyperledger/production
     ports:
-      - 7051:7051
-      - 7053:7053
+      - 999:7051
+      - 21212:7053
 
-  debut_peer1.debutinfotech.com:
-    container_name: debut_peer1.debutinfotech.com
+  peer1.debutinfotech.com:
+    container_name: DebutInfotechPeer1
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=debut_peer1.debutinfotech.com
-      - CORE_PEER_ADDRESS=debut_peer1.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=debut_peer0.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=debut_peer1.debutinfotech.com:7051
-      - CORE_PEER_LOCALMSPID=debut_infotech_peer_org_msp
+      - CORE_PEER_ID=peer1.debutinfotech.com
+      - CORE_PEER_ADDRESS=peer1.debutinfotech.com:2051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.debutinfotech.com:2051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.debutinfotech.com:1051
+      - CORE_PEER_LOCALMSPID=DebutMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer1.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/debut_peer1.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
-        - debut_peer1.debutinfotech.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer1.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer1.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.debutinfotech.com:/var/hyperledger/production
     ports:
-      - 8051:7051
-      - 8053:7053
+      - 2051:7051
+      - 2053:7053
 
-  axis_peer0.axisbank.com:
-    container_name: axis_peer0.axisbank.com
+  peer0.axisbank.com:
+    container_name: AxisBankPeer0
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=axis_peer0.axisbank.com
-      - CORE_PEER_ADDRESS=axis_peer0.axisbank.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=axis_peer1.axisbank.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=axis_peer0.axisbank.com:7051
-      - CORE_PEER_LOCALMSPID=axis_bank_peer_org_msp
+      - CORE_PEER_ID=peer0.axisbank.com
+      - CORE_PEER_ADDRESS=peer0.axisbank.com:9051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.axisbank.com:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.axisbank.com:10051
+      - CORE_PEER_LOCALMSPID=AxisMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer0.axisbank.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer0.axisbank.com/tls:/etc/hyperledger/fabric/tls
-        - axis_peer0.axisbank.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/peer0.axisbank.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/peer0.axisbank.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.axisbank.com:/var/hyperledger/production
     ports:
       - 9051:7051
       - 9053:7053
 
-  axis_peer1.axisbank.com:
-    container_name: axis_peer1.axisbank.com
+  peer1.axisbank.com:
+    container_name: AxisBankPeer1
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=axis_peer1.axisbank.com
-      - CORE_PEER_ADDRESS=axis_peer1.axisbank.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=axis_peer0.axisbank.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=axis_peer1.axisbank.com:7051
-      - CORE_PEER_LOCALMSPID=axis_bank_peer_org_msp
+      - CORE_PEER_ID=peer1.axisbank.com
+      - CORE_PEER_ADDRESS=peer1.axisbank.com:10051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.axisbank.com:10051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.axisbank.com:9051
+      - CORE_PEER_LOCALMSPID=AxisMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer1.axisbank.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer1.axisbank.com/tls:/etc/hyperledger/fabric/tls
-        - axis_peer1.axisbank.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/peer1.axisbank.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/axisbank.com/peers/peer1.axisbank.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.axisbank.com:/var/hyperledger/production
     ports:
       - 10051:7051
       - 10053:7053
-
-  axis_peer2.axisbank.com:
-    container_name: axis_peer2.axisbank.com
-    extends:
-      file: peer-base.yaml
-      service: peer-base
-    environment:
-      - CORE_PEER_ID=axis_peer2.axisbank.com
-      - CORE_PEER_ADDRESS=axis_peer2.axisbank.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=axis_peer1.axisbank.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=axis_peer2.axisbank.com:7051
-      - CORE_PEER_LOCALMSPID=axis_bank_peer_org_msp   
-    volumes:
-        - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer2.axisbank.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/axisbank.com/peers/axis_peer2.axisbank.com/tls:/etc/hyperledger/fabric/tls
-        - axis_peer2.axisbank.com:/var/hyperledger/production
-    ports:
-      - 11051:7051
-      - 11053:7053
-    

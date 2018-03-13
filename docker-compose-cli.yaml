@@ -6,66 +6,56 @@
 version: '2'
 
 volumes:
-  hr.debutinfotech.com:
-  debut_peer0.debutinfotech.com:
-  debut_peer1.debutinfotech.com:
-  axis_peer0.axisbank.com:
-  axis_peer1.axisbank.com:
-  axis_peer2.axisbank.com:
+  ca.debutinfotech.com:
+  peer0.debutinfotech.com:
+  peer1.debutinfotech.com:
+  peer0.axisbank.com:
+  peer1.axisbank.com:
 
 networks:
-  byfn:
+  debutAxisNetwork:
 
 services:
-  # Debut Infotech HR Orderer
-  hr.debutinfotech.com:
+
+  ca.debutinfotech.com:
     extends:
       file:   base/docker-compose-base.yaml
-      service: hr.debutinfotech.com
-    container_name: DebutHROrderer
+      service: ca.debutinfotech.com
+    container_name: DebutInfotechCAOrderer
     networks:
-      - byfn
+      - debutAxisNetwork
 
-  # Peers Setup  
-  debut_peer0.debutinfotech.com:
-    container_name: debut_peer0.debutinfotech.com
+  peer0.debutinfotech.com:
+    container_name: DebutInfotechPeer0
     extends:
       file:  base/docker-compose-base.yaml
-      service: debut_peer0.debutinfotech.com
+      service: peer0.debutinfotech.com
     networks:
-      - byfn
+      - debutAxisNetwork
 
-  debut_peer1.debutinfotech.com:
-    container_name: debut_peer1.debutinfotech.com
+  peer1.debutinfotech.com:
+    container_name: DebutInfotechPeer1
     extends:
       file:  base/docker-compose-base.yaml
-      service: debut_peer1.debutinfotech.com
+      service: peer0.debutinfotech.com
     networks:
-      - byfn
+      - debutAxisNetwork
 
-  axis_peer0.axisbank.com:
-    container_name: axis_peer0.axisbank.com
+  peer0.axisbank.com:
+    container_name: AxisBankPeer0
     extends:
       file:  base/docker-compose-base.yaml
-      service: axis_peer0.axisbank.com
+      service: peer0.axisbank.com
     networks:
-      - byfn
+      - debutAxisNetwork
 
-  axis_peer1.axisbank.com:
-    container_name: axis_peer1.axisbank.com
+  peer1.axisbank.com:
+    container_name: AxisBankPeer1
     extends:
       file:  base/docker-compose-base.yaml
-      service: axis_peer1.axisbank.com
+      service: peer1.axisbank.com
     networks:
-      - byfn
-
-  axis_peer2.axisbank.com:
-    container_name: axis_peer2.axisbank.com
-    extends:
-      file:  base/docker-compose-base.yaml
-      service: axis_peer2.axisbank.com
-    networks:
-      - byfn
+      - debutAxisNetwork
 
   cli:
     container_name: cli
@@ -78,12 +68,12 @@ services:
       #- CORE_LOGGING_LEVEL=DEBUG
       - CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer_debut0.debutinfotech.com:7051
-      - CORE_PEER_LOCALMSPID=debut_infotech_peer_org_msp
+      - CORE_PEER_ADDRESS=peer0.debutinfotech.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/debut_peer0.debutinfotech.com/tls/ca.crt
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/ca.crt
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/users/Admin@debutinfotech.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
@@ -94,11 +84,10 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - hr.debutinfotech.com
-      - debut_peer0.debutinfotech.com
-      - debut_peer1.debutinfotech.com
-      - axis_peer0.axisbank.com
-      - axis_peer1.axisbank.com
-      - axis_peer2.axisbank.com
+      - ca.debutinfotech.com
+      - peer0.debutinfotech.com
+      - peer1.debutinfotech.com
+      - peer0.axisbank.com
+      - peer1.axisbank.com
     networks:
-      - byfn
+      - debutAxisNetwork

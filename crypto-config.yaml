@@ -10,26 +10,13 @@ OrdererOrgs:
   # ---------------------------------------------------------------------------
   # Orderer
   # ---------------------------------------------------------------------------
-  - Name: Debut_Infotech_Pvt_Ltd
+  - Name: DebutInfotechPvtLtd
     Domain: debutinfotech.com
-        # ---------------------------------------------------------------------------
+    # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
     # ---------------------------------------------------------------------------
     Specs:
-      - Hostname: hr
-      # - Hostname: ca
-
-  # - Name: Axis_Bank_Pvt_Ltd
-  #   Domain: axisbank.com
-  #   # ---------------------------------------------------------------------------
-  #   # "Specs" - See PeerOrgs below for complete description
-  #   # ---------------------------------------------------------------------------
-  #   Specs:
-  #     - Hostname: accounts
-
-
-
-
+      - Hostname: ca
 # ---------------------------------------------------------------------------
 # "PeerOrgs" - Definition of organizations managing peer nodes
 # ---------------------------------------------------------------------------
@@ -37,7 +24,7 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # Org1
   # ---------------------------------------------------------------------------
-  - Name: Debut_Infotech_Pvt_Ltd
+  - Name: DebutInfotechPvtLtd
     Domain: debutinfotech.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
@@ -76,7 +63,7 @@ PeerOrgs:
     Template:
       Count: 2
       # Start: 5
-      Hostname: debut_peer{{.Index}} # default
+      # Hostname: {{.Prefix}}{{.Index}} # default
     # ---------------------------------------------------------------------------
     # "Users"
     # ---------------------------------------------------------------------------
@@ -87,11 +74,10 @@ PeerOrgs:
   # ---------------------------------------------------------------------------
   # Org2: See "Org1" for full specification
   # ---------------------------------------------------------------------------
-  - Name: Axis_Bank_Pvt_Ltd
+  - Name: AxisBankPvtLtd
     Domain: axisbank.com
     EnableNodeOUs: true
     Template:
-      Count: 3
-      Hostname: axis_peer{{.Index}}
+      Count: 2
     Users:
       Count: 1
