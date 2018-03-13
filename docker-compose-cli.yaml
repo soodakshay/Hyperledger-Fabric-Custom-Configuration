@@ -6,9 +6,9 @@
 version: '2'
 
 volumes:
-  hr.debutinfotech.com:
-  peer0.debutinfotech.com:
-  peer1.debutinfotech.com:
+  hr.debut.com:
+  peer0.debut.com:
+  peer1.debut.com:
   peer0.axisbank.com:
   peer1.axisbank.com:
 
@@ -17,27 +17,27 @@ networks:
 
 services:
 
-  hr.debutinfotech.com:
+  hr.debut.com:
     extends:
       file:   base/docker-compose-base.yaml
-      service: hr.debutinfotech.com
-    container_name: hr.debutinfotech.com
+      service: hr.debut.com
+    container_name: hr.debut.com
     networks:
       - new
 
-  peer0.debutinfotech.com:
-    container_name: peer0.debutinfotech.com
+  peer0.debut.com:
+    container_name: peer0.debut.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.debutinfotech.com
+      service: peer0.debut.com
     networks:
       - new
 
-  peer1.debutinfotech.com:
-    container_name: peer1.debutinfotech.com
+  peer1.debut.com:
+    container_name: peer1.debut.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.debutinfotech.com
+      service: peer1.debut.com
     networks:
       - new
 
@@ -68,25 +68,26 @@ services:
       - CORE_LOGGING_LEVEL=DEBUG
       #- CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.debutinfotech.com:7051
+      - CORE_PEER_ADDRESS=peer0.debut.com:7051
       - CORE_PEER_LOCALMSPID=DebutMSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/users/Admin@debutinfotech.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debut.com/peers/peer0.debut.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debut.com/peers/peer0.debut.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debut.com/peers/peer0.debut.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debut.com/users/Admin@debut.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
+        - ./setup-peer.sh:/opt/gopath/src/github.com/hyperledger/fabric/peer/setup-peer.sh
         - /var/run/:/host/var/run/
         - ./../chaincode/:/opt/gopath/src/github.com/chaincode
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - hr.debutinfotech.com
-      - peer0.debutinfotech.com
-      - peer1.debutinfotech.com
+      - hr.debut.com
+      - peer0.debut.com
+      - peer1.debut.com
       - peer0.axisbank.com
       - peer1.axisbank.com
     networks:

@@ -1,3 +1,6 @@
+docker kill $(docker ps -q)
+docker rm $(docker ps -qa)
+docker volume rm $(docker volume ls -q)
 
 rm -R channel-artifacts
 rm -R crypto-config

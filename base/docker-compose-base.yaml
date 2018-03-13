@@ -7,11 +7,11 @@ version: '2'
 
 services:
 
-  hr.debutinfotech.com:
-    container_name: hr.debutinfotech.com
+  hr.debut.com:
+    container_name: hr.debut.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
-      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LOGLEVEL=DEBUG
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
@@ -26,48 +26,48 @@ services:
     command: orderer
     volumes:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/hr.debutinfotech.com/msp:/var/hyperledger/orderer/msp
-    - ../crypto-config/ordererOrganizations/debutinfotech.com/orderers/hr.debutinfotech.com/tls/:/var/hyperledger/orderer/tls
-    - hr.debutinfotech.com:/var/hyperledger/production/orderer
+    - ../crypto-config/ordererOrganizations/debut.com/orderers/hr.debut.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/debut.com/orderers/hr.debut.com/tls/:/var/hyperledger/orderer/tls
+    - hr.debut.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
 
-  peer0.debutinfotech.com:
-    container_name: peer0.debutinfotech.com
+  peer0.debut.com:
+    container_name: peer0.debut.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.debutinfotech.com
-      - CORE_PEER_ADDRESS=peer0.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.debutinfotech.com:7051
+      - CORE_PEER_ID=peer0.debut.com
+      - CORE_PEER_ADDRESS=peer0.debut.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.debut.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.debut.com:7051
       - CORE_PEER_LOCALMSPID=DebutMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
-        - peer0.debutinfotech.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/debut.com/peers/peer0.debut.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/debut.com/peers/peer0.debut.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.debut.com:/var/hyperledger/production
     ports:
       - 81:7051
       - 82:7053
 
-  peer1.debutinfotech.com:
-    container_name: peer1.debutinfotech.com
+  peer1.debut.com:
+    container_name: peer1.debut.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.debutinfotech.com
-      - CORE_PEER_ADDRESS=peer1.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.debutinfotech.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.debutinfotech.com:7051
+      - CORE_PEER_ID=peer1.debut.com
+      - CORE_PEER_ADDRESS=peer1.debut.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.debut.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.debut.com:7051
       - CORE_PEER_LOCALMSPID=DebutMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer1.debutinfotech.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/debutinfotech.com/peers/peer1.debutinfotech.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.debutinfotech.com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/debut.com/peers/peer1.debut.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/debut.com/peers/peer1.debut.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.debut.com:/var/hyperledger/production
     ports:
       - 83:7051
       - 84:7053

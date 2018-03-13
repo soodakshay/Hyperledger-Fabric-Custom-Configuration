@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: DebutInfotechPvtLtdOrderer
-    Domain: debutinfotech.com
+    Domain: debut.com
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
     # ---------------------------------------------------------------------------
@@ -25,7 +25,7 @@ PeerOrgs:
   # Org1
   # ---------------------------------------------------------------------------
   - Name: DebutInfotechPvtLtd
-    Domain: debutinfotech.com
+    Domain: debut.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"

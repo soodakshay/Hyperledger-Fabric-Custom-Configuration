@@ -59,7 +59,7 @@ Organizations:
         ID: DebutOrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/debutinfotech.com/msp
+        MSPDir: crypto-config/ordererOrganizations/debut.com/msp
 
     - &DebutInfotech
         # DefaultOrg defines the organization which is used in the sampleconfig
@@ -69,13 +69,13 @@ Organizations:
         # ID to load the MSP definition as
         ID: DebutMSP
 
-        MSPDir: crypto-config/peerOrganizations/debutinfotech.com/msp
+        MSPDir: crypto-config/peerOrganizations/debut.com/msp
 
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0.debutinfotech.com
+            - Host: peer0.debut.com
               Port: 7051
 
     - &AxisBank
@@ -110,7 +110,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - ca.debutinfotech.com:7050
+        - hr.debut.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
