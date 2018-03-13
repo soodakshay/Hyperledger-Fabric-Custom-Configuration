@@ -1,18 +1,10 @@
 
-docker kill $(docker ps -q)
-docker rm $(docker ps -qa)
-docker network prune
-echo "y"
-
-echo "**************************** Docker containers killed and removed ****************************"
-
 rm -R channel-artifacts
 rm -R crypto-config
 
 echo "**************************** Old Certificates removed ****************************"
 
 mkdir channel-artifacts
-mkdir crypto-config
 
 cryptogen generate --config crypto-config.yaml
 
@@ -20,7 +12,7 @@ echo "**************************** New Certificates Generated ******************
 
 export FABRIC_CFG_PATH=$PWD
 export IMAGE_TAG=latest
-export COMPOSE_PROJECT_NAME=first_project
+export COMPOSE_PROJECT_NAME=first
 
 configtxgen -profile DebutAxisGenesisBlockProfile -outputBlock ./channel-artifacts/genesis.block
 

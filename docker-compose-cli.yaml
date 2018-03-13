@@ -6,56 +6,56 @@
 version: '2'
 
 volumes:
-  ca.debutinfotech.com:
+  hr.debutinfotech.com:
   peer0.debutinfotech.com:
   peer1.debutinfotech.com:
   peer0.axisbank.com:
   peer1.axisbank.com:
 
 networks:
-  debutAxisNetwork:
+  newNetwork:
 
 services:
 
-  ca.debutinfotech.com:
+  hr.debutinfotech.com:
     extends:
       file:   base/docker-compose-base.yaml
-      service: ca.debutinfotech.com
-    container_name: DebutInfotechCAOrderer
+      service: hr.debutinfotech.com
+    container_name: hr.debutinfotech.com
     networks:
-      - debutAxisNetwork
+      - newNetwork
 
   peer0.debutinfotech.com:
-    container_name: DebutInfotechPeer0
+    container_name: peer0.debutinfotech.com
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.debutinfotech.com
     networks:
-      - debutAxisNetwork
+      - newNetwork
 
   peer1.debutinfotech.com:
-    container_name: DebutInfotechPeer1
+    container_name: peer1.debutinfotech.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.debutinfotech.com
+      service: peer1.debutinfotech.com
     networks:
-      - debutAxisNetwork
+      - newNetwork
 
   peer0.axisbank.com:
-    container_name: AxisBankPeer0
+    container_name: peer0.axisbank.com
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.axisbank.com
     networks:
-      - debutAxisNetwork
+      - newNetwork
 
   peer1.axisbank.com:
-    container_name: AxisBankPeer1
+    container_name: peer1.axisbank.com
     extends:
       file:  base/docker-compose-base.yaml
       service: peer1.axisbank.com
     networks:
-      - debutAxisNetwork
+      - newNetwork
 
   cli:
     container_name: cli
@@ -65,11 +65,11 @@ services:
     environment:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      #- CORE_LOGGING_LEVEL=DEBUG
-      - CORE_LOGGING_LEVEL=INFO
+      - CORE_LOGGING_LEVEL=DEBUG
+      #- CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.debutinfotech.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_LOCALMSPID=DebutMSP
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/debutinfotech.com/peers/peer0.debutinfotech.com/tls/server.key
@@ -84,10 +84,10 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - ca.debutinfotech.com
+      - hr.debutinfotech.com
       - peer0.debutinfotech.com
       - peer1.debutinfotech.com
       - peer0.axisbank.com
       - peer1.axisbank.com
     networks:
-      - debutAxisNetwork
+      - newNetwork
