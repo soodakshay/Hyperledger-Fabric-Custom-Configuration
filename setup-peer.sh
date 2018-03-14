@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export CHANNEL_NAME=channel1
 
 echo "******************SET CHANNEL_NAME=channel1******************"
@@ -14,10 +16,19 @@ CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypt
 
 echo "******************Peer 0 Of Axis Joined Channel1******************"
 
-# peer channel update -o hr.debut.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/DebutMSPanchors.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem
+peer channel update -o hr.debut.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/DebutMSPanchors.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem
 
 echo "******************DEBUT MSP ANCHOR PEER CHANNEL UPDATED******************"
 
-# CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/axisbank.com/users/Admin@axisbank.com/msp CORE_PEER_ADDRESS=peer0.axisbank.com:7051 CORE_PEER_LOCALMSPID=AxisMSP CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/axisbank.com/peers/peer0.axisbank.com/tls/ca.crt peer channel update -o hr.debut.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/AxisMSPanchors.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem
+CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/axisbank.com/users/Admin@axisbank.com/msp CORE_PEER_ADDRESS=peer0.axisbank.com:7051 CORE_PEER_LOCALMSPID=AxisMSP CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/axisbank.com/peers/peer0.axisbank.com/tls/ca.crt peer channel update -o hr.debut.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/AxisMSPanchors.tx --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem
 
 echo "******************AXIS MSP ANCHOR PEER CHANNEL UPDATED******************"
+
+
+# peer chaincode install -n mycc -v 1.0 -p github.com/chaincode/chaincode_example02/go/
+
+# echo "******************CHAINCODE mycc 1.0 INSTALLED******************"
+
+# peer chaincode instantiate -o hr.debut.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('DebutMSP.peer','AxisMSP.peer')"
+
+# echo "******************CHAINCODE mycc 1.0 INSTANTIATED******************"

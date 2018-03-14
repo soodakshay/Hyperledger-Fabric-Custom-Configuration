@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 docker kill $(docker ps -q)
 docker rm $(docker ps -qa)
 docker volume rm $(docker volume ls -q)
@@ -15,7 +18,7 @@ echo "**************************** New Certificates Generated ******************
 
 export FABRIC_CFG_PATH=$PWD
 export IMAGE_TAG=latest
-export COMPOSE_PROJECT_NAME=s
+#export COMPOSE_PROJECT_NAME=s
 
 configtxgen -profile DebutAxisGenesisBlockProfile -outputBlock ./channel-artifacts/genesis.block
 
@@ -23,4 +26,4 @@ export CHANNEL_NAME=channel1  && configtxgen -profile DebutAxisChannelProfile -o
 
 configtxgen -profile DebutAxisChannelProfile -outputAnchorPeersUpdate ./channel-artifacts/DebutMSPanchors.tx -channelID $CHANNEL_NAME -asOrg DebutInfotechPvtLtd
 configtxgen -profile DebutAxisChannelProfile -outputAnchorPeersUpdate ./channel-artifacts/AxisMSPanchors.tx -channelID $CHANNEL_NAME -asOrg AxisBankPvtLtd
-docker-compose -f docker-compose-cli.yaml up
+docker-compose -f docker-compose-cli.yaml up -d
