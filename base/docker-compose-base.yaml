@@ -7,6 +7,35 @@ version: '2'
 
 services:
 
+  ca.debut.com:
+    container_name: ca.debut.com
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.debut.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.debut.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${DEBUT_CA_KEY}
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ../crypto-config/peerOrganizations/debut.com/ca/:/etc/hyperledger/fabric-ca-server-config    
+    ports:
+      - 7054:7054
+
+  ca.axisbank.com:
+    container_name: ca.axisbank.com
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.axisbank.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.axisbank.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${AXIS_CA_KEY}
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ../crypto-config/peerOrganizations/axisbank.com/ca/:/etc/hyperledger/fabric-ca-server-config    
+    ports:
+      - 7055:7055
+    
+
   hr.debut.com:
     container_name: hr.debut.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
@@ -111,3 +140,4 @@ services:
     ports:
       - 87:7051
       - 88:7053
+    

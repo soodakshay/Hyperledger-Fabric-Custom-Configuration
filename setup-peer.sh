@@ -25,10 +25,15 @@ CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypt
 echo "******************AXIS MSP ANCHOR PEER CHANNEL UPDATED******************"
 
 
-# peer chaincode install -n mycc -v 1.0 -p github.com/chaincode/chaincode_example02/go/
+ peer chaincode install -n cc -v 1.0 -p github.com/chaincode/fabcar/go/
 
-# echo "******************CHAINCODE mycc 1.0 INSTALLED******************"
+ echo "******************CHAINCODE cc 1.0 INSTALLED******************"
 
-# peer chaincode instantiate -o hr.debut.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('DebutMSP.peer','AxisMSP.peer')"
+ peer chaincode instantiate -o hr.debut.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem -C $CHANNEL_NAME -n cc -v 1.0 -c '{"Args":[]}'  -P "OR ('DebutMSP.peer','AxisMSP.peer')"
 
-# echo "******************CHAINCODE mycc 1.0 INSTANTIATED******************"
+echo "******************CHAINCODE cc 1.0 INSTANTIATED******************"
+
+
+peer chaincode invoke -o hr.debut.com:7050  --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem  -C $CHANNEL_NAME -n cc -c '{"Args":["initLedger"]}'
+
+peer chaincode invoke -o hr.debut.com:7050  --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem  -C $CHANNEL_NAME -n cc -c '{"Args":["queryAllCars"]}'

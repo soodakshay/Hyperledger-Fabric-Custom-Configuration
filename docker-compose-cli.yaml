@@ -11,11 +11,42 @@ volumes:
   peer1.debut.com:
   peer0.axisbank.com:
   peer1.axisbank.com:
+  ca.debut.com:
+  ca.axisbank.com:
 
 networks:
   new:
 
 services:
+
+  ca.debut.com:
+    extends:
+      file: base/docker-compose-base.yaml
+      service: ca.debut.com
+    container_name: ca.debut.com
+    networks:
+      - new
+
+  ca.axisbank.com:
+    extends:
+      file: base/docker-compose-base.yaml
+      service: ca.axisbank.com
+    container_name: ca.axisbank.com
+    networks:
+      - new
+
+  couchdb:
+    container_name: couchdb
+    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 5984:5984
+    networks:
+      - new
 
   hr.debut.com:
     extends:
@@ -32,6 +63,9 @@ services:
       service: peer0.debut.com
     networks:
       - new
+    depends_on:
+      - hr.debut.com
+      - couchdb
 
   peer1.debut.com:
     container_name: peer1.debut.com
@@ -40,6 +74,9 @@ services:
       service: peer1.debut.com
     networks:
       - new
+    depends_on:
+      - hr.debut.com
+      - couchdb
 
   peer0.axisbank.com:
     container_name: peer0.axisbank.com
@@ -48,6 +85,9 @@ services:
       service: peer0.axisbank.com
     networks:
       - new
+    depends_on:
+      - hr.debut.com
+      - couchdb
 
   peer1.axisbank.com:
     container_name: peer1.axisbank.com
@@ -56,6 +96,9 @@ services:
       service: peer1.axisbank.com
     networks:
       - new
+    depends_on:
+      - hr.debut.com
+      - couchdb
 
   cli:
     container_name: cli
@@ -84,11 +127,11 @@ services:
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
-    depends_on:
-      - hr.debut.com
-      - peer0.debut.com
-      - peer1.debut.com
-      - peer0.axisbank.com
-      - peer1.axisbank.com
+    # depends_on:
+      #  - hr.debut.com
+      # - peer0.debut.com
+      # - peer1.debut.com
+      # - peer0.axisbank.com
+      # - peer1.axisbank.com
     networks:
       - new
