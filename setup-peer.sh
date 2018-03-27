@@ -25,11 +25,11 @@ echo "******************DEBUT MSP ANCHOR PEER CHANNEL UPDATED******************"
 echo "******************AXIS MSP ANCHOR PEER CHANNEL UPDATED******************"
 
 
- peer chaincode install -n cc -v 1.0 -p github.com/chaincode/
+peer chaincode install -n mychaincode -v 1.0 -p github.com/chaincode/
 
- echo "******************CHAINCODE cc 1.0 INSTALLED******************"
+echo "******************CHAINCODE cc 1.0 INSTALLED******************"
 
- peer chaincode instantiate -o hr.debut.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem -C $CHANNEL_NAME -n cc -v 1.0 -c '{"Args":[]}'  -P "OR ('DebutMSP.peer','AxisMSP.peer')"
+peer chaincode instantiate -o hr.debut.com:7050 --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/debut.com/orderers/hr.debut.com/msp/tlscacerts/tlsca.debut.com-cert.pem -C $CHANNEL_NAME -n mychaincode -v 1.0 -c '{"Args":[]}'  -P "OR ('DebutMSP.peer','AxisMSP.peer')"
 
 echo "******************CHAINCODE cc 1.0 INSTANTIATED******************"
 
