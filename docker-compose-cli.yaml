@@ -7,6 +7,7 @@ version: '2'
 
 volumes:
   hr.debut.com:
+  accounts.debut.com:
   peer0.debut.com:
   peer1.debut.com:
   peer0.axisbank.com:
@@ -18,6 +19,145 @@ networks:
   new:
 
 services:
+
+  zookeeper0:
+    container_name: zookeeper0
+    image: hyperledger/fabric-zookeeper
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    ports:
+      - 2111
+      - 2888
+      - 3888
+    networks:
+      - new
+
+  zookeeper1:
+    container_name: zookeeper1
+    image: hyperledger/fabric-zookeeper
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    ports:
+      - 2111
+      - 2888
+      - 3888
+    networks:
+      - new
+
+  zookeeper2:
+    container_name: zookeeper2
+    image: hyperledger/fabric-zookeeper
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    ports:
+      - 2111
+      - 2888
+      - 3888
+    networks:
+      - new
+
+  kafka0:
+    image: hyperledger/fabric-kafka
+    container_name: kafka0
+    environment:
+        - KAFKA_LOG_RETENTION_MS=-1
+        - KAFKA_MESSAGE_MAX_BYTES=103809024
+        - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+        - KAFKA_BROKER_ID=0
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+        - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+        - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+        - KAFKA_MIN_INSYNC_REPLICAS=1
+    ports:
+        - 9092
+    depends_on:
+        - zookeeper0
+        - zookeeper1
+        - zookeeper2
+    links:
+        - zookeeper0:zookeeper0
+        - zookeeper1:zookeeper1
+        - zookeeper2:zookeeper2
+    networks:
+      - new
+
+  kafka1:
+    image: hyperledger/fabric-kafka
+    container_name: kafka1
+    environment:
+        - KAFKA_LOG_RETENTION_MS=-1
+        - KAFKA_MESSAGE_MAX_BYTES=103809024
+        - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+        - KAFKA_BROKER_ID=1
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+        - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+        - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+        - KAFKA_MIN_INSYNC_REPLICAS=1
+    ports:
+        - 9092
+    depends_on:
+        - zookeeper0
+        - zookeeper1
+        - zookeeper2
+    links:
+        - zookeeper0:zookeeper0
+        - zookeeper1:zookeeper1
+        - zookeeper2:zookeeper2
+    networks:
+      - new
+
+  kafka2:
+    image: hyperledger/fabric-kafka
+    container_name: kafka2
+    environment:
+        - KAFKA_LOG_RETENTION_MS=-1
+        - KAFKA_MESSAGE_MAX_BYTES=103809024
+        - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+        - KAFKA_BROKER_ID=2
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+        - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+        - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+        - KAFKA_MIN_INSYNC_REPLICAS=1
+    ports:
+        - 9092
+    depends_on:
+        - zookeeper0
+        - zookeeper1
+        - zookeeper2
+    links:
+        - zookeeper0:zookeeper0
+        - zookeeper1:zookeeper1
+        - zookeeper2:zookeeper2
+    networks:
+      - new
+
+  kafka3:
+    image: hyperledger/fabric-kafka
+    container_name: kafka3
+    environment:
+        - KAFKA_LOG_RETENTION_MS=-1
+        - KAFKA_MESSAGE_MAX_BYTES=103809024
+        - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+        - KAFKA_BROKER_ID=3
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+        - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+        - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+        - KAFKA_MIN_INSYNC_REPLICAS=1
+    ports:
+        - 9092
+    depends_on:
+        - zookeeper0
+        - zookeeper1
+        - zookeeper2
+    links:
+        - zookeeper0:zookeeper0
+        - zookeeper1:zookeeper1
+        - zookeeper2:zookeeper2
+    networks:
+      - new
 
   ca.debut.com:
     extends:
@@ -53,6 +193,34 @@ services:
       file:   base/docker-compose-base.yaml
       service: hr.debut.com
     container_name: hr.debut.com
+    depends_on:
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    links:
+      - kafka0:kafka0
+      - kafka1:kafka1
+      - kafka2:kafka2
+      - kafka3:kafka3
+    networks:
+      - new
+
+  accounts.debut.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: accounts.debut.com
+    container_name: accounts.debut.com
+    depends_on:
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    links:
+      - kafka0:kafka0
+      - kafka1:kafka1
+      - kafka2:kafka2
+      - kafka3:kafka3
     networks:
       - new
 

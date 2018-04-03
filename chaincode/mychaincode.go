@@ -37,8 +37,6 @@ func (contract *MyContract) Invoke(stub shim.ChaincodeStubInterface) peer.Respon
 		return listAllUsers(stub)
 	} else if fun == "deleteUser" {
 		return deleteUser(stub, args)
-	} else if fun == "updateUser" {
-		return updateUser(stub, args)
 	}
 
 	return shim.Error("Invalid Function name")
@@ -155,9 +153,9 @@ func deleteUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	return shim.Success([]byte(msgBytes.String()))
 }
 
-func updateUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+// func updateUser(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 
-}
+// }
 
 func main() {
 
