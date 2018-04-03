@@ -18,6 +18,8 @@ cryptogen generate --config crypto-config.yaml
 
 export root_dir=$PWD
 
+cd $root_dir
+
 cd ./crypto-config/peerOrganizations/debut.com/ca/
 
 export DEBUT_CA_KEY=$(ls *_sk)
